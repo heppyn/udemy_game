@@ -63,7 +63,10 @@ void Game::ProcessInput() {
 
 void Game::Update() {
     // wait until 16.6ms has elapsed since the last frame
-    while (!SDL_TICKS_PASSED(SDL_GetTicks(), m_ticksLastFrame + FRAME_TARGET_TIME));
+    float timeToWait = FRAME_TARGET_TIME - (SDL_GetTicks() - m_ticksLastFrame);
+    if (timeToWait > 0 && timeToWait <= FRAME_TARGET_TIME) {
+        SDL_Delay((unsigned)timeToWait);
+    }
 
     float deltaTime = (SDL_GetTicks() - m_ticksLastFrame) / 1000.0f;
     // set minimum frame rate
