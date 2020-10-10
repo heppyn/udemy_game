@@ -1,0 +1,5 @@
+/game
+/cmake/
+/cmake-build-debug/
+/CMakeLists.txt
+/FindSDL2.cmake
