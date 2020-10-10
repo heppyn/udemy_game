@@ -18,6 +18,7 @@ private:
     bool m_isRunning = false;
     SDL_Window * m_window = nullptr;
     SDL_Renderer * m_renderer = nullptr;
+    float m_ticksLastFrame;
 };
 
 #endif //GAME_GAME_H
