@@ -3,8 +3,8 @@
 #include "./Game.h"
 #include "../lib/glm/glm.hpp"
 
-glm::vec2 projectilePos{0.0f, 0.0f};
-glm::vec2 projectileVel {15.0f, 10.0f};
+EntityManager manager;
+SDL_Renderer* Game::m_renderer;
 
 void Game::Initialize(int width, int height) {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -71,25 +71,14 @@ void Game::Update() {
     deltaTime = (deltaTime > FRAME_TARGET_MIN_TIME) ? FRAME_TARGET_MIN_TIME : deltaTime;
     m_ticksLastFrame = SDL_GetTicks();
 
-    projectilePos = glm::vec2(
-            projectilePos.x + projectileVel.x * deltaTime,
-            projectilePos.y + projectileVel.y * deltaTime
-        );
+    //TODO: Here we call the manager.update to update all entities as function of delta time
 }
 
 void Game::Render() {
     SDL_SetRenderDrawColor(m_renderer, 21, 21, 21, 255);
     SDL_RenderClear(m_renderer);
 
-    SDL_Rect projectile {
-        (int)projectilePos.x,
-        (int)projectilePos.y,
-        10,
-        10
-    };
-
-    SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
-    SDL_RenderFillRect(m_renderer, &projectile);
+    //TODO: Here we call the manager.renderer to render all entities
 
     SDL_RenderPresent(m_renderer);
 }
@@ -98,4 +87,8 @@ void Game::Destroy() {
     SDL_DestroyRenderer(m_renderer);
     SDL_DestroyWindow(m_window);
     SDL_Quit();
+}
+
+void Game::LoadLevel(int levelNumber) {
+
 }

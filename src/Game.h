@@ -5,6 +5,10 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 
+#include "./Entity.h"
+#include "./Component.h"
+#include "./EntityManager.h"
+
 class Game {
 public:
     void Initialize(int width, int height);
@@ -13,12 +17,14 @@ public:
     void Update();
     void Render();
     void Destroy();
+    void LoadLevel(int levelNumber);
+
+    static SDL_Renderer * m_renderer;
 
 private:
     bool m_isRunning = false;
     SDL_Window * m_window = nullptr;
-    SDL_Renderer * m_renderer = nullptr;
-    float m_ticksLastFrame;
+    float m_ticksLastFrame{};
 };
 
 #endif //GAME_GAME_H
