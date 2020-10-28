@@ -39,9 +39,7 @@ const std::string& Entity::Name() const {
 void Entity::Print() const {
     std::cout << "Entity name: " << m_name << '\n';
 
-    for (const auto* comp : m_components) {
-        std::cout << "\tComponent<";
-        comp->Print();
-        std::cout << ">\n";
+    for (const auto mapElem : m_componentTypeMap) {
+        std::cout << "\tComponent<" << mapElem.first->name() << ">\n";
     }
 }

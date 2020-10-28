@@ -3,9 +3,12 @@
 #include "./Game.h"
 #include "./Components/TransformComponent.h"
 #include "../lib/glm/glm.hpp"
+#include "AssetManager.h"
+#include "./Components/SpriteComponent.h"
 
 EntityManager manager;
 SDL_Renderer* Game::m_renderer;
+AssetManager* Game::m_assetManager = new AssetManager(&manager);
 
 void Game::Initialize(int width, int height) {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -96,17 +99,15 @@ void Game::Destroy() {
 }
 
 void Game::LoadLevel(int levelNumber) {
-    Entity& newEntityA(manager.AddEntity("projectileA"));
-    newEntityA.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
+// Start including new assets to the asset manager list
+    std::string textureFilePath = "./assets/images/tank-big-right.png";
+    m_assetManager->AddTexture("tank-image", textureFilePath.c_str());
 
-    Entity& newEntityB(manager.AddEntity("projectileB"));
-    newEntityB.AddComponent<TransformComponent>(WINDOW_WITH - 32, 0, -20, 20, 32, 32, 1);
+// Start including entities and also components to them
 
-    Entity& newEntityC(manager.AddEntity("projectileC"));
-    newEntityC.AddComponent<TransformComponent>(WINDOW_WITH - 32, WINDOW_HEIGHT - 32, -20, -20, 32, 32, 1);
-
-    Entity& newEntityD(manager.AddEntity("projectileD"));
-    newEntityD.AddComponent<TransformComponent>(0, WINDOW_HEIGHT - 32, 20, -20, 32, 32, 1);
+    Entity& tank(manager.AddEntity("tank"));
+    tank.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
+    tank.AddComponent<SpriteComponent>("tank-image");
 
     manager.PrintEntities();
 }

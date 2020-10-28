@@ -9,6 +9,8 @@
 #include "./Component.h"
 #include "./EntityManager.h"
 
+class AssetManager;
+
 class Game {
 public:
     void Initialize(int width, int height);
@@ -20,6 +22,7 @@ public:
     void LoadLevel(int levelNumber);
 
     static SDL_Renderer * m_renderer;
+    static AssetManager* m_assetManager;
 
 private:
     bool m_isRunning = false;

@@ -13,13 +13,4 @@ void TransformComponent::Update(float deltaTime) {
     m_position.y += m_velocity.y * deltaTime;
 }
 
-void TransformComponent::Render() {
-    SDL_Rect transformRectangle {
-            (int) m_position.x,
-            (int) m_position.y,
-            m_width,
-            m_height
-    };
-    SDL_SetRenderDrawColor(Game::m_renderer, 255, 255, 255, 255);
-    SDL_RenderFillRect(Game::m_renderer, &transformRectangle);
-}
+void TransformComponent::Render() {}
