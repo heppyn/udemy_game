@@ -5,6 +5,7 @@
 #include "./EntityManager.h"
 #include <vector>
 #include <string>
+#include <map>
 #include <newt.h>
 
 class EntityManager;
@@ -27,9 +28,15 @@ public:
 
         newComponent->owner = this;
         m_components.emplace_back(newComponent);
+        m_componentTypeMap[&typeid(*newComponent)] = newComponent;
         newComponent->Initialize();
 
         return *newComponent;
+    }
+
+    template<typename T>
+    T* GetComponent() {
+        return static_cast<T*>(m_componentTypeMap[&typeid(T)]);
     }
 
 protected:
@@ -37,6 +44,7 @@ protected:
     bool m_isActive;
     std::vector<Component*> m_components;
     std::string m_name;
+    std::map<const std::type_info*, Component*> m_componentTypeMap;
 };
 
 #endif //GAME_ENTITY_H
