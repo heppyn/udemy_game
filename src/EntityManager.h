@@ -15,6 +15,7 @@ public:
     Entity& AddEntity(std::string entityName);
     std::vector<Entity*> GetEntities() const;
     int GetEntityCount() const;
+    void PrintEntities() const;
 private:
     std::vector<Entity*> m_entities;
 };

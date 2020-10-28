@@ -18,6 +18,8 @@ public:
     void Render();
     void Destroy();
     [[nodiscard]] bool IsActive() const;
+    [[nodiscard]] const std::string& Name() const;
+    void Print() const;
 
     template<typename T, typename... TArgs>
     T& AddComponent(TArgs&&... args) {

@@ -107,4 +107,6 @@ void Game::LoadLevel(int levelNumber) {
 
     Entity& newEntityD(manager.AddEntity("projectileD"));
     newEntityD.AddComponent<TransformComponent>(0, WINDOW_HEIGHT - 32, 20, -20, 32, 32, 1);
+
+    manager.PrintEntities();
 }

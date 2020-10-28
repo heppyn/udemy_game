@@ -39,3 +39,9 @@ std::vector<Entity *> EntityManager::GetEntities() const {
 int EntityManager::GetEntityCount() const {
     return m_entities.size();
 }
+
+void EntityManager::PrintEntities() const {
+    for (const auto* entity : m_entities) {
+        entity->Print();
+    }
+}

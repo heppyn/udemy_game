@@ -1,5 +1,7 @@
 #include "./Entity.h"
 
+#include <iostream>
+
 Entity::Entity(EntityManager &manager)
     : Entity(manager, "")
 {}
@@ -28,4 +30,18 @@ void Entity::Destroy() {
 
 bool Entity::IsActive() const {
     return m_isActive;
+}
+
+const std::string& Entity::Name() const {
+    return m_name;
+}
+
+void Entity::Print() const {
+    std::cout << "Entity name: " << m_name << '\n';
+
+    for (const auto* comp : m_components) {
+        std::cout << "\tComponent<";
+        comp->Print();
+        std::cout << ">\n";
+    }
 }

@@ -15,6 +15,7 @@ public:
     void Initialize () override;
     void Update(float deltaTime) override;
     void Render() override;
+    void Print() const override { std::cout << "TransformComponent"; }
 private:
     glm::vec2 m_position;
     glm::vec2 m_velocity;
