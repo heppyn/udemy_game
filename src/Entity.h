@@ -39,6 +39,11 @@ public:
         return static_cast<T*>(m_componentTypeMap[&typeid(T)]);
     }
 
+    template<typename T>
+    bool HasComponent() const noexcept {
+        return m_componentTypeMap.find(&typeid(T)) != m_componentTypeMap.end();
+    }
+
 protected:
     EntityManager& m_manager;
     bool m_isActive;
