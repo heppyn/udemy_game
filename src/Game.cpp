@@ -96,6 +96,15 @@ void Game::Destroy() {
 }
 
 void Game::LoadLevel(int levelNumber) {
-    Entity& newEntity(manager.AddEntity("projectile"));
-    newEntity.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
+    Entity& newEntityA(manager.AddEntity("projectileA"));
+    newEntityA.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
+
+    Entity& newEntityB(manager.AddEntity("projectileB"));
+    newEntityB.AddComponent<TransformComponent>(WINDOW_WITH - 32, 0, -20, 20, 32, 32, 1);
+
+    Entity& newEntityC(manager.AddEntity("projectileC"));
+    newEntityC.AddComponent<TransformComponent>(WINDOW_WITH - 32, WINDOW_HEIGHT - 32, -20, -20, 32, 32, 1);
+
+    Entity& newEntityD(manager.AddEntity("projectileD"));
+    newEntityD.AddComponent<TransformComponent>(0, WINDOW_HEIGHT - 32, 20, -20, 32, 32, 1);
 }
