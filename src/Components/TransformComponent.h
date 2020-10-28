@@ -8,7 +8,7 @@
 #include <SDL_render.h>
 
 
-class TransformComponent : public Component{
+class TransformComponent : public Component {
 public:
     TransformComponent(int posX, int posY, int velX, int velY, int w, int h, int s);
 

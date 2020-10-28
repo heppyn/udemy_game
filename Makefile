@@ -2,7 +2,7 @@ CXX = g++
 CPPFLAGS = -w -Wall -pedantic -Wextra -std=c++17
 DEBUG = -g -fsanitize=address
 RELEASE = -O3
-IMPORTS = -I"./lib/lua" -L"./lib/lua" -llua -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+IMPORTS = -I"./lib/lua" -L"./lib/lua" -llua -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -I/usr/include/SDL2
 TARGETS = game game_debug
 
 all: run
@@ -10,11 +10,13 @@ all: run
 build_release:
 	$(CXX) $(CPPFLAGS) $(RELEASE) $(IMPORTS) \
 	./src/*.cpp \
+	./src/Components/*.cpp \
 	-o game;
 
 build_debug:
 	$(CXX) $(CPPFLAGS) $(DEBUG) $(IMPORTS) \
 	./src/*.cpp \
+	./src/Components/*.cpp \
 	-o game_debug;
 
 clean:

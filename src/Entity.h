@@ -5,6 +5,7 @@
 #include "./EntityManager.h"
 #include <vector>
 #include <string>
+#include <newt.h>
 
 class EntityManager;
 class Component;
@@ -18,6 +19,16 @@ public:
     void Destroy();
     [[nodiscard]] bool IsActive() const;
 
+    template<typename T, typename... TArgs>
+    T& AddComponent(TArgs&&... args) {
+        T* newComponent(new T(std::forward<TArgs>(args)...));
+
+        newComponent->owner = this;
+        m_components.emplace_back(newComponent);
+        newComponent->Initialize();
+
+        return *newComponent;
+    }
 
 protected:
     EntityManager& m_manager;

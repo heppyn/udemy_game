@@ -1,6 +1,7 @@
 #include <iostream>
 #include "./Constants.h"
 #include "./Game.h"
+#include "./Components/TransformComponent.h"
 #include "../lib/glm/glm.hpp"
 
 EntityManager manager;
@@ -29,6 +30,8 @@ void Game::Initialize(int width, int height) {
         std::cerr << "Error creating renderer\n";
         return;
     }
+
+    LoadLevel(0);
 
     m_isRunning = true;
     m_ticksLastFrame = SDL_GetTicks();
@@ -71,14 +74,17 @@ void Game::Update() {
     deltaTime = (deltaTime > FRAME_TARGET_MIN_TIME) ? FRAME_TARGET_MIN_TIME : deltaTime;
     m_ticksLastFrame = SDL_GetTicks();
 
-    //TODO: Here we call the manager.update to update all entities as function of delta time
+    manager.Update(deltaTime);
 }
 
 void Game::Render() {
     SDL_SetRenderDrawColor(m_renderer, 21, 21, 21, 255);
     SDL_RenderClear(m_renderer);
 
-    //TODO: Here we call the manager.renderer to render all entities
+    if (manager.HasNoEntities()) {
+        return;
+    }
+    manager.Render();
 
     SDL_RenderPresent(m_renderer);
 }
@@ -90,5 +96,6 @@ void Game::Destroy() {
 }
 
 void Game::LoadLevel(int levelNumber) {
-
+    Entity& newEntity(manager.AddEntity("projectile"));
+    newEntity.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
 }
