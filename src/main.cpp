@@ -14,6 +14,7 @@ int main() {
     }
 
     game->Destroy();
+    delete game;
     std::cout << "Done\n";
     return 0;
 }

@@ -12,6 +12,10 @@ Entity::Entity(EntityManager &manager, std::string name)
         , m_isActive(true)
 {}
 
+Entity::~Entity() {
+    Destroy();
+}
+
 void Entity::Update(const float deltaTime) {
     for (auto& component : m_components) {
         component->Update(deltaTime);
@@ -26,6 +30,10 @@ void Entity::Render() {
 
 void Entity::Destroy() {
     m_isActive = false;
+    for (auto comp : m_components) {
+        delete comp;
+    }
+    m_components.clear();
 }
 
 bool Entity::IsActive() const {

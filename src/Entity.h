@@ -15,6 +15,7 @@ class Entity {
 public:
     Entity(EntityManager& manager);
     Entity(EntityManager& manager, std::string name);
+    ~Entity();
     void Update(float deltaTime);
     void Render();
     void Destroy();

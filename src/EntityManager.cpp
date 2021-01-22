@@ -4,10 +4,16 @@
 
 #include "EntityManager.h"
 
-void EntityManager::ClearData() {
-for (auto& entity : m_entities) {
-    entity->Destroy();
+EntityManager::~EntityManager() {
+    ClearData();
 }
+
+void EntityManager::ClearData() {
+    for (auto entity : m_entities) {
+//        entity->Destroy();
+        delete entity;
+    }
+    m_entities.clear();
 }
 
 void EntityManager::Update(const float deltaTime) {

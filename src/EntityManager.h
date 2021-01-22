@@ -8,6 +8,7 @@
 
 class EntityManager {
 public:
+    ~EntityManager();
     void ClearData();
     void Update(float deltaTime);
     void Render();
