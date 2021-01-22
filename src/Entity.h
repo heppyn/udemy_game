@@ -41,7 +41,7 @@ public:
 
     template<typename T>
     bool HasComponent() const noexcept {
-        return m_componentTypeMap.find(&typeid(T)) != m_componentTypeMap.end();
+        return m_componentTypeMap.count(&typeid(T));
     }
 
 protected:
