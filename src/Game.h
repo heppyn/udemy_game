@@ -23,6 +23,7 @@ public:
 
     static SDL_Renderer * m_renderer;
     static AssetManager* m_assetManager;
+    static SDL_Event m_event;
 
 private:
     bool m_isRunning = false;
