@@ -5,6 +5,7 @@
 #include "../AssetManager.h"
 #include "../TextureManager.h"
 #include "TransformComponent.h"
+#include "Animation.h"
 #include <SDL2/SDL.h>
 
 class SpriteComponent : public Component {
@@ -13,6 +14,40 @@ public:
 
     SpriteComponent(const char* fileName) {
         SetTexture(fileName);
+    }
+
+    SpriteComponent(std::string id, int numFrames, int animationSpeed, bool hasDirections, bool isFixed)
+    : m_isAnimated(true), m_numFrames(numFrames), m_animationSpeed(animationSpeed), m_isFixed(isFixed)
+    {
+        if (hasDirections) {
+            Animation down(0, numFrames, animationSpeed);
+            Animation right(1, numFrames, animationSpeed);
+            Animation left(2, numFrames, animationSpeed);
+            Animation up(3, numFrames, animationSpeed);
+
+            m_animations.emplace("DownAnimation", down);
+            m_animations.emplace("UpAnimation", up);
+            m_animations.emplace("LeftAnimation", left);
+            m_animations.emplace("RightAnimation", right);
+
+            m_animationIndex = 0;
+            m_currentAnimationName = "DownAnimation";
+        }
+        else {
+            m_animations.emplace("SingleAnimation", Animation(0, numFrames, animationSpeed));
+            m_animationIndex = 0;
+            m_currentAnimationName = "SingleAnimation";
+        }
+
+        Play(m_currentAnimationName);
+        SetTexture(id);
+    }
+
+    void Play(std::string animationName) {
+        m_numFrames = m_animations[animationName].m_numFrames;
+        m_animationIndex = m_animations[animationName].m_index;
+        m_animationSpeed = m_animations[animationName].m_animationSpeed;
+        m_currentAnimationName = animationName;
     }
 
     void SetTexture(std::string assetTextureId) {
@@ -28,8 +63,12 @@ public:
     }
 
     void Update(float deltaTime) override {
-        m_destination.x = (int)m_transform->m_position.x;
-        m_destination.y = (int)m_transform->m_position.y;
+        if (m_isAnimated) {
+            m_source.x = m_source.w * static_cast<int>((SDL_GetTicks() / m_animationSpeed) % m_numFrames);
+        }
+        m_source.y = m_animationIndex * m_transform->m_height;
+        m_destination.x = static_cast<int>(m_transform->m_position.x);
+        m_destination.y = static_cast<int>(m_transform->m_position.y);
         m_destination.w = (int)m_transform->m_width * m_transform->m_scale;
         m_destination.h = (int)m_transform->m_height * m_transform->m_scale;
     }
@@ -43,6 +82,13 @@ private:
     SDL_Texture* m_texture;
     SDL_Rect m_source;
     SDL_Rect m_destination;
+    bool m_isAnimated{false};
+    int m_numFrames{0};
+    int m_animationSpeed{0};
+    bool m_isFixed{false}; // do not move ever, like label
+    std::map<std::string, Animation> m_animations{};
+    std::string m_currentAnimationName;
+    unsigned m_animationIndex{0};
 };
 
 
