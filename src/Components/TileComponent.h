@@ -37,7 +37,8 @@ public:
     }
 
     void Update(float deltaTime) override {
-        // TODO: tile position based on camera
+        destinationRectangle.x = position.x - Game::m_camera.x;
+        destinationRectangle.y = position.y - Game::m_camera.y;
     }
 
     void Render() override {

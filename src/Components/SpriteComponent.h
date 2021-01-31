@@ -67,10 +67,10 @@ public:
             m_source.x = m_source.w * static_cast<int>((SDL_GetTicks() / m_animationSpeed) % m_numFrames);
         }
         m_source.y = m_animationIndex * m_transform->m_height;
-        m_destination.x = static_cast<int>(m_transform->m_position.x);
-        m_destination.y = static_cast<int>(m_transform->m_position.y);
-        m_destination.w = (int)m_transform->m_width * m_transform->m_scale;
-        m_destination.h = (int)m_transform->m_height * m_transform->m_scale;
+        m_destination.x = static_cast<int>(m_transform->m_position.x) - (m_isFixed ? 0 : Game::m_camera.x);
+        m_destination.y = static_cast<int>(m_transform->m_position.y) - (m_isFixed ? 0 : Game::m_camera.y);
+        m_destination.w = (int) m_transform->m_width * m_transform->m_scale;
+        m_destination.h = (int) m_transform->m_height * m_transform->m_scale;
     }
 
     void Render() override {

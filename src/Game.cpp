@@ -10,10 +10,13 @@
 #include "Map.h"
 
 EntityManager manager;
-SDL_Renderer* Game::m_renderer;
-AssetManager* Game::m_assetManager = new AssetManager(&manager);
+SDL_Renderer *Game::m_renderer;
+AssetManager *Game::m_assetManager = new AssetManager(&manager);
 SDL_Event Game::m_event;
+SDL_Rect Game::m_camera = {0, 0, WINDOW_WITH, WINDOW_HEIGHT};
 std::unique_ptr <Map> map;
+
+Entity &chopper(manager.AddEntity("chopper", PLAYER_LAYER));
 
 void Game::Initialize(int width, int height) {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -73,7 +76,7 @@ void Game::Update() {
     // wait until 16.6ms has elapsed since the last frame
     float timeToWait = FRAME_TARGET_TIME - (SDL_GetTicks() - m_ticksLastFrame);
     if (timeToWait > 0 && timeToWait <= FRAME_TARGET_TIME) {
-        SDL_Delay((unsigned)timeToWait);
+        SDL_Delay((unsigned) timeToWait);
     }
 
     float deltaTime = (SDL_GetTicks() - m_ticksLastFrame) / 1000.0f;
@@ -82,6 +85,18 @@ void Game::Update() {
     m_ticksLastFrame = SDL_GetTicks();
 
     manager.Update(deltaTime);
+
+    HandleCameraMovement();
+}
+
+void Game::HandleCameraMovement() {
+    TransformComponent *mainPlayerTransform = chopper.GetComponent<TransformComponent>();
+
+    m_camera.x = mainPlayerTransform->m_position.x - (WINDOW_WITH / 2);
+    m_camera.y = mainPlayerTransform->m_position.y - (WINDOW_HEIGHT / 2);
+
+    m_camera.x = m_camera.x < 0 ? 0 : (m_camera.x > m_camera.w ? m_camera.w : m_camera.x);
+    m_camera.y = m_camera.y < 0 ? 0 : (m_camera.y > m_camera.h ? m_camera.h : m_camera.y);
 }
 
 void Game::Render() {
@@ -108,7 +123,7 @@ void Game::LoadLevel(int levelNumber) {
     m_assetManager->AddTexture("chopper-image", std::string("./assets/images/chopper-spritesheet.png").c_str());
     m_assetManager->AddTexture("jungle-tileTexture", std::string("./assets/tilemaps/jungle.png").c_str());
 
-    map = std::make_unique<Map>("jungle-tileTexture", 1, 32);
+    map = std::make_unique<Map>("jungle-tileTexture", 2, 32);
     map->LoadMap("./assets/tilemaps/jungle.map", 25, 20);
 
 // Start including entities and also components to them
@@ -117,7 +132,6 @@ void Game::LoadLevel(int levelNumber) {
     tank.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
     tank.AddComponent<SpriteComponent>("tank-image");
 
-    Entity &chopper(manager.AddEntity("chopper", PLAYER_LAYER));
     chopper.AddComponent<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
     chopper.AddComponent<SpriteComponent>("chopper-image", 2, 90, true, false);
     chopper.AddComponent<KeyboardController>("up", "down", "left", "right", "space");
