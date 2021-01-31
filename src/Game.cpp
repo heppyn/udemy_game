@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 #include "./Constants.h"
 #include "./Game.h"
 #include "./Components/TransformComponent.h"
@@ -6,11 +7,13 @@
 #include "AssetManager.h"
 #include "./Components/SpriteComponent.h"
 #include "./Components/KeyboardController.h"
+#include "Map.h"
 
 EntityManager manager;
 SDL_Renderer* Game::m_renderer;
 AssetManager* Game::m_assetManager = new AssetManager(&manager);
 SDL_Event Game::m_event;
+std::unique_ptr <Map> map;
 
 void Game::Initialize(int width, int height) {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -103,14 +106,18 @@ void Game::LoadLevel(int levelNumber) {
 // Start including new assets to the asset manager list
     m_assetManager->AddTexture("tank-image", std::string("./assets/images/tank-big-right.png").c_str());
     m_assetManager->AddTexture("chopper-image", std::string("./assets/images/chopper-spritesheet.png").c_str());
+    m_assetManager->AddTexture("jungle-tileTexture", std::string("./assets/tilemaps/jungle.png").c_str());
+
+    map = std::make_unique<Map>("jungle-tileTexture", 1, 32);
+    map->LoadMap("./assets/tilemaps/jungle.map", 25, 20);
 
 // Start including entities and also components to them
 
-    Entity& tank(manager.AddEntity("tank"));
+    Entity &tank(manager.AddEntity("tank"));
     tank.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
     tank.AddComponent<SpriteComponent>("tank-image");
 
-    Entity& chopper(manager.AddEntity("chopper"));
+    Entity &chopper(manager.AddEntity("chopper"));
     chopper.AddComponent<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
     chopper.AddComponent<SpriteComponent>("chopper-image", 2, 90, true, false);
     chopper.AddComponent<KeyboardController>("up", "down", "left", "right", "space");
