@@ -3,6 +3,7 @@
 
 #include "./Component.h"
 #include "./EntityManager.h"
+#include "./Constants.h"
 #include <vector>
 #include <string>
 #include <map>
@@ -13,14 +14,24 @@ class Component;
 
 class Entity {
 public:
-    Entity(EntityManager& manager);
-    Entity(EntityManager& manager, std::string name);
+    LayerType layer;
+
+    Entity(EntityManager &manager);
+
+    Entity(EntityManager &manager, std::string name, LayerType layer);
+
     ~Entity();
+
     void Update(float deltaTime);
+
     void Render();
+
     void Destroy();
+
     [[nodiscard]] bool IsActive() const;
-    [[nodiscard]] const std::string& Name() const;
+
+    [[nodiscard]] const std::string &Name() const;
+
     void Print() const;
 
     template<typename T, typename... TArgs>

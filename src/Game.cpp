@@ -113,11 +113,11 @@ void Game::LoadLevel(int levelNumber) {
 
 // Start including entities and also components to them
 
-    Entity &tank(manager.AddEntity("tank"));
+    Entity &tank(manager.AddEntity("tank", ENEMY_LAYER));
     tank.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
     tank.AddComponent<SpriteComponent>("tank-image");
 
-    Entity &chopper(manager.AddEntity("chopper"));
+    Entity &chopper(manager.AddEntity("chopper", PLAYER_LAYER));
     chopper.AddComponent<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
     chopper.AddComponent<SpriteComponent>("chopper-image", 2, 90, true, false);
     chopper.AddComponent<KeyboardController>("up", "down", "left", "right", "space");

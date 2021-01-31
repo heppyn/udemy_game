@@ -3,13 +3,11 @@
 #include <iostream>
 
 Entity::Entity(EntityManager &manager)
-    : Entity(manager, "")
+        : Entity(manager, "", TILE_MAP_LAYER)
 {}
 
-Entity::Entity(EntityManager &manager, std::string name)
-        : m_manager(manager)
-        , m_name(std::move(name))
-        , m_isActive(true)
+Entity::Entity(EntityManager &manager, std::string name, LayerType layer)
+        : layer(layer), m_manager(manager), m_name(std::move(name)), m_isActive(true)
 {}
 
 Entity::~Entity() {

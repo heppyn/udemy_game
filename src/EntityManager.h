@@ -3,6 +3,7 @@
 
 #include "./Entity.h"
 #include "./Component.h"
+#include "./Constants.h"
 #include <vector>
 #include <string>
 
@@ -12,9 +13,15 @@ public:
     void ClearData();
     void Update(float deltaTime);
     void Render();
+
     bool HasNoEntities() const;
-    Entity& AddEntity(std::string entityName);
-    std::vector<Entity*> GetEntities() const;
+
+    Entity &AddEntity(std::string entityName, LayerType layer);
+
+    std::vector<Entity *> GetEntities() const;
+
+    std::vector<Entity *> GetEntitiesByLayer(LayerType layer) const;
+
     int GetEntityCount() const;
     void PrintEntities() const;
 private:
