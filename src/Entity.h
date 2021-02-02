@@ -15,6 +15,7 @@ class Component;
 class Entity {
 public:
     LayerType layer;
+    std::string m_name;
 
     Entity(EntityManager &manager);
 
@@ -60,7 +61,6 @@ protected:
     EntityManager& m_manager;
     bool m_isActive;
     std::vector<Component*> m_components;
-    std::string m_name;
     std::map<const std::type_info*, Component*> m_componentTypeMap;
 };
 

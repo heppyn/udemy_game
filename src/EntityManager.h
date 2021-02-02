@@ -10,8 +10,11 @@
 class EntityManager {
 public:
     ~EntityManager();
+
     void ClearData();
+
     void Update(float deltaTime);
+
     void Render();
 
     bool HasNoEntities() const;
@@ -22,10 +25,14 @@ public:
 
     std::vector<Entity *> GetEntitiesByLayer(LayerType layer) const;
 
+    CollisionType CheckEntityCollisions() const;
+
     int GetEntityCount() const;
+
     void PrintEntities() const;
+
 private:
-    std::vector<Entity*> m_entities;
+    std::vector<Entity *> m_entities;
 };
 
 

@@ -7,6 +7,7 @@
 #include "AssetManager.h"
 #include "./Components/SpriteComponent.h"
 #include "./Components/KeyboardController.h"
+#include "./Components/ColliderComponent.h"
 #include "Map.h"
 
 EntityManager manager;
@@ -87,6 +88,7 @@ void Game::Update() {
     manager.Update(deltaTime);
 
     HandleCameraMovement();
+    CheckCollisions();
 }
 
 void Game::HandleCameraMovement() {
@@ -97,6 +99,25 @@ void Game::HandleCameraMovement() {
 
     m_camera.x = m_camera.x < 0 ? 0 : (m_camera.x > m_camera.w ? m_camera.w : m_camera.x);
     m_camera.y = m_camera.y < 0 ? 0 : (m_camera.y > m_camera.h ? m_camera.h : m_camera.y);
+}
+
+void Game::CheckCollisions() {
+    auto collisionType = manager.CheckEntityCollisions();
+    if (collisionType == PLAYER_ENEMY_COLLISION) {
+        ProcessGameOver();
+    } else if (collisionType == PLAYER_LEVEL_COMPLETE_COLLISION) {
+        ProcessNextLevel(1);
+    }
+}
+
+void Game::ProcessNextLevel(int level) {
+    std::cout << "Next level\n";
+    m_isRunning = false;
+}
+
+void Game::ProcessGameOver() {
+    std::cout << "Game over\n";
+    m_isRunning = false;
 }
 
 void Game::Render() {
@@ -121,6 +142,8 @@ void Game::LoadLevel(int levelNumber) {
 // Start including new assets to the asset manager list
     m_assetManager->AddTexture("tank-image", std::string("./assets/images/tank-big-right.png").c_str());
     m_assetManager->AddTexture("chopper-image", std::string("./assets/images/chopper-spritesheet.png").c_str());
+    m_assetManager->AddTexture("heliport-image", std::string("./assets/images/heliport.png").c_str());
+    m_assetManager->AddTexture("radar-image", std::string("./assets/images/radar.png").c_str());
     m_assetManager->AddTexture("jungle-tileTexture", std::string("./assets/tilemaps/jungle.png").c_str());
 
     map = std::make_unique<Map>("jungle-tileTexture", 2, 32);
@@ -129,12 +152,23 @@ void Game::LoadLevel(int levelNumber) {
 // Start including entities and also components to them
 
     Entity &tank(manager.AddEntity("tank", ENEMY_LAYER));
-    tank.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
+    tank.AddComponent<TransformComponent>(150, 495, 5, 0, 32, 32, 1);
     tank.AddComponent<SpriteComponent>("tank-image");
+    tank.AddComponent<ColliderComponent>("ENEMY", 150, 495, 32, 32);
+
+    Entity &heliport(manager.AddEntity("Heliport", OBSTACLE_LAYER));
+    heliport.AddComponent<TransformComponent>(470, 420, 0, 0, 32, 32, 1);
+    heliport.AddComponent<SpriteComponent>("heliport-image");
+    heliport.AddComponent<ColliderComponent>("LEVEL_COMPLETE", 470, 420, 32, 32);
 
     chopper.AddComponent<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
     chopper.AddComponent<SpriteComponent>("chopper-image", 2, 90, true, false);
     chopper.AddComponent<KeyboardController>("up", "down", "left", "right", "space");
+    chopper.AddComponent<ColliderComponent>("PLAYER", 240, 106, 32, 32);
+
+    Entity &radar(manager.AddEntity("Radar", UI_LAYER));
+    radar.AddComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
+    radar.AddComponent<SpriteComponent>("radar-image", 8, 150, false, true);
 
     manager.PrintEntities();
 }
